@@ -40,15 +40,13 @@ app.post('/api/students', async (req, res) => {
     }
 });
 
-// ==========================================
-// CÂU 38: API PUT /api/students/:id - Cập nhật sinh viên theo ID
-// ==========================================
+// CÂU 38: API PUT /api/students/:id - Cập nhật sinh viên theo studentId (MSSV)
 app.put('/api/students/:id', async (req, res) => {
     try {
-        const updatedStudent = await Student.findByIdAndUpdate(
-            req.params.id, // Lấy ID từ URL
-            req.body,      // Dữ liệu mới cần cập nhật
-            { new: true }  // Trả về dữ liệu sau khi đã cập nhật
+        const updatedStudent = await Student.findOneAndUpdate(
+            { studentId: req.params.id }, // Tìm theo trường studentId (VD: SV003)
+            req.body,                    // Dữ liệu mới cần cập nhật
+            { new: true }                // Trả về dữ liệu sau khi cập nhật
         );
         if (!updatedStudent) {
             return res.status(404).json({ error: 'Không tìm thấy sinh viên' });
@@ -60,11 +58,11 @@ app.put('/api/students/:id', async (req, res) => {
 });
 
 // ==========================================
-// CÂU 39: API DELETE /api/students/:id - Xóa sinh viên theo ID
+// CÂU 39: API DELETE /api/students/:id - Xóa sinh viên theo studentId (MSSV)
 // ==========================================
 app.delete('/api/students/:id', async (req, res) => {
     try {
-        const deletedStudent = await Student.findByIdAndDelete(req.params.id);
+        const deletedStudent = await Student.findOneAndDelete({ studentId: req.params.id });
         if (!deletedStudent) {
             return res.status(404).json({ error: 'Không tìm thấy sinh viên' });
         }
