@@ -1,12 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
 
-// 1. Thêm dòng này để import Model Student (câu 35)
+// 1. Thêm dòng này để import Model Student
 const Student = require('../models/student');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Middleware CORS
+app.use(cors());
 
 // Middleware đọc JSON
 app.use(express.json());
