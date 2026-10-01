@@ -174,7 +174,7 @@ function App() {
         margin: '0 auto'
       }}
     >
-      <h1>Quản Lý Sinh Viên (MERN Stack)</h1>
+      <h1>Quản Lý Sinh Viên (MERN Stack) - Version 2.0</h1>
 
       {/* Form nhập liệu */}
       <div
