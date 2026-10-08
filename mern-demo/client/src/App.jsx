@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 // URL Backend chạy trên GitHub Codespaces
-const API_URL =
-  'https://fictional-space-broccoli-97xqvvv57pp52756v-5000.app.github.dev'
+// const API_URL =
+//  'https://fictional-space-broccoli-97xqvvv57pp52756v-5000.app.github.dev'
+
+
+// thay đường link chạy qpi cho mục render buổi số 5
+const API_URL = import.meta.env.VITE_API_URL || 'https://mern-backend-236455.onrender.com'
 
 function App() {
   const [students, setStudents] = useState([])
