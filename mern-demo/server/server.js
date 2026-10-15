@@ -81,6 +81,21 @@ app.get('/api/hello', (req, res) => {
     res.json({ message: 'Backend đang hoạt động' });
 });
 
+// app.listen(PORT, () => {
+//    console.log(`Server is running on port ${PORT}`);
+// });
+
+
+ // CÂU 44: API kiểm tra sức khỏe Backend
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'UP',
+        timestamp: new Date(),
+        uptime: process.uptime()
+    });
+});
+
 app.listen(PORT, () => {
+    console.log('=== BACKEND VERSION 1.2 - AUTO DEPLOY TEST ===');
     console.log(`Server is running on port ${PORT}`);
 });

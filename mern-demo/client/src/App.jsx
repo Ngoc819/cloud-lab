@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-// URL Backend chạy trên GitHub Codespaces
-// const API_URL =
-//  'https://fictional-space-broccoli-97xqvvv57pp52756v-5000.app.github.dev'
-
-
-// thay đường link chạy qpi cho mục render buổi số 5
-const API_URL = import.meta.env.VITE_API_URL || 'https://mern-backend-236455.onrender.com'
+// Gọi API thông qua Nginx Reverse Proxy
+// Không cần khai báo URL backend riêng nữa.
 
 function App() {
   const [students, setStudents] = useState([])
@@ -21,12 +16,12 @@ function App() {
     email: ''
   })
 
-  // State để biết đang ở chế độ Sửa hay Thêm mới
+  // State xác định đang ở chế độ Sửa hay Thêm mới
   const [editingId, setEditingId] = useState(null)
 
   // Hàm gọi API lấy danh sách sinh viên
   const fetchStudents = () => {
-    fetch(`${API_URL}/api/students`)
+    fetch('/api/students')
       .then((res) => {
         if (!res.ok) {
           throw new Error('Không thể tải dữ liệu từ server!')
@@ -36,6 +31,7 @@ function App() {
       .then((data) => {
         setStudents(data)
         setLoading(false)
+        setError(null)
       })
       .catch((err) => {
         setError(err.message)
@@ -62,7 +58,7 @@ function App() {
 
     if (editingId) {
       // Gọi API cập nhật sinh viên (PUT)
-      fetch(`${API_URL}/api/students/${editingId}`, {
+      fetch(`/api/students/${editingId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -76,8 +72,8 @@ function App() {
           return res.json()
         })
         .then((updatedStudent) => {
-          setStudents(
-            students.map((s) =>
+          setStudents((prevStudents) =>
+            prevStudents.map((s) =>
               s.studentId === editingId || s._id === editingId
                 ? updatedStudent
                 : s
@@ -95,7 +91,7 @@ function App() {
         .catch((err) => alert(err.message))
     } else {
       // Gọi API thêm sinh viên mới (POST)
-      fetch(`${API_URL}/api/students`, {
+      fetch('/api/students', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -109,7 +105,7 @@ function App() {
           return res.json()
         })
         .then((newStudent) => {
-          setStudents([...students, newStudent])
+          setStudents((prevStudents) => [...prevStudents, newStudent])
 
           setFormData({
             studentId: '',
@@ -149,7 +145,7 @@ function App() {
       return
     }
 
-    fetch(`${API_URL}/api/students/${id}`, {
+    fetch(`/api/students/${id}`, {
       method: 'DELETE'
     })
       .then((res) => {
@@ -160,8 +156,8 @@ function App() {
         return res.json()
       })
       .then(() => {
-        setStudents(
-          students.filter(
+        setStudents((prevStudents) =>
+          prevStudents.filter(
             (s) => s.studentId !== id && s._id !== id
           )
         )
@@ -287,7 +283,7 @@ function App() {
             />
           </div>
 
-          {/* Nút */}
+          {/* Các nút thao tác */}
           <div
             style={{
               display: 'flex',
@@ -298,9 +294,7 @@ function App() {
               type="submit"
               style={{
                 padding: '10px 20px',
-                backgroundColor: editingId
-                  ? '#ff9800'
-                  : '#4CAF50',
+                backgroundColor: editingId ? '#ff9800' : '#4CAF50',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
@@ -414,9 +408,7 @@ function App() {
                     {/* Nút xóa */}
                     <button
                       onClick={() =>
-                        handleDelete(
-                          student.studentId || student._id
-                        )
+                        handleDelete(student.studentId || student._id)
                       }
                       style={{
                         padding: '5px 10px',

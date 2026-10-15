@@ -1,17 +1,24 @@
-FROM node:20
+
+# Stage 1: Build React App
+FROM node:20 AS build
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY client/package.json client/package-lock.json ./
 
 RUN npm install
 
-COPY . .
+COPY client/ ./
 
 RUN npm run build
 
-RUN npm install -g serve
+# Stage 2: Serve React App bằng Nginx
+FROM nginx:alpine
 
-EXPOSE 5173
+COPY --from=build /app/dist /usr/share/nginx/html
 
-CMD ["serve", "-s", "dist", "-l", "5173"]
+COPY client/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
