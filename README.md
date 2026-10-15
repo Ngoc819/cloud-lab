@@ -1,5 +1,5 @@
 # Cloud Computing Laboratory
-Student Name: Nguyen Van A
-Student ID: B1234567
-Class: DI20V7A1
+Student Name: Huỳnh Lê Bảo Ngọc
+Student ID: 236455
+Class: DH23TIN07
 Update README
